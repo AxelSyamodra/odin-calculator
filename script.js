@@ -11,37 +11,74 @@ function multiply(num1, num2) {
 }
 
 function divide(num1, num2) {
-  return num1 / num2;
+  return num2 !== 0 ? num1 / num2 : "Error";
 }
 
 function operate(operator, num1, num2) {
   switch (operator) {
     case "+":
-      add(num1, num2);
-      break;
+      return add(num1, num2);
+
     case "-":
-      subtract(num1, num2);
-      break;
+      return subtract(num1, num2);
+
     case "*":
-      multiply(num1, num2);
-      break;
+      return multiply(num1, num2);
+
     case "/":
-      divide(num1, num2);
-      break;
+      return divide(num1, num2);
   }
 }
 
 const display = document.getElementById("display");
 const buttons = document.querySelectorAll("button");
 
-let currentInput = "";
+let firstNumber = "";
+let secondNumber = "";
+let operator = "";
+let shouldResetDisplay = false;
+
+function updateDisplay(value) {
+  if (shouldResetDisplay) {
+    display.textContent = "";
+    shouldResetDisplay = false;
+  }
+  display.textContent += value;
+}
 
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     const value = button.textContent;
 
-    currentInput += value;
+    if (!isNaN(value)) {
+      if (!operator) {
+        firstNumber += value;
+      } else {
+        secondNumber += value;
+      }
+      updateDisplay(value);
+    } else if (["+", "-", "*", "/"].includes(value)) {
+      operator = value;
+      updateDisplay(" " + value + " ");
+    } else if (value === "=") {
+      if (firstNumber && operator && secondNumber) {
+        let result;
+        const num1 = parseFloat(firstNumber);
+        const num2 = parseFloat(secondNumber);
 
-    display.textContent = currentInput;
+        result = operate(operator, num1, num2);
+
+        display.textContent = result;
+        firstNumber = result.toString();
+        secondNumber = "";
+        operator = "";
+        shouldResetDisplay = true;
+      } else if (value === "C") {
+        firstNumber = "";
+        secondNumber = "";
+        operator = "";
+        display.textContent = "";
+      }
+    }
   });
 });
