@@ -45,12 +45,12 @@ function updateDisplay(value) {
   }
   display.textContent += value;
 }
-
 buttons.forEach((button) => {
   button.addEventListener("click", () => {
     const value = button.textContent;
 
     if (!isNaN(value)) {
+      // number clicked
       if (!operator) {
         firstNumber += value;
       } else {
@@ -73,12 +73,12 @@ buttons.forEach((button) => {
         secondNumber = "";
         operator = "";
         shouldResetDisplay = true;
-      } else if (value === "C") {
-        firstNumber = "";
-        secondNumber = "";
-        operator = "";
-        display.textContent = "";
       }
+    } else if (value === "C") {
+      firstNumber = "";
+      secondNumber = "";
+      operator = "";
+      display.textContent = "";
     }
   });
 });
